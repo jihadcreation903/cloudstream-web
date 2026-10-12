@@ -36,9 +36,11 @@ export async function loadRepositoryManifest({ signal } = {}) {
 
   // The Worker returns { manifest, source, note }. Also tolerate a raw
   // manifest response so this adapter can be used with a compatible API.
-  const manifest = payload && Object.hasOwn(payload, "manifest")
-    ? payload.manifest
-    : payload;
+  const manifest = payload && Array.isArray(payload.providers)
+    ? payload.providers
+    : payload && Object.hasOwn(payload, "manifest")
+      ? payload.manifest
+      : payload;
 
   if (!manifest || (typeof manifest !== "object" && !Array.isArray(manifest))) {
     throw new ProviderAdapterError("Repository returned an invalid manifest.", "INVALID_MANIFEST");
@@ -48,6 +50,8 @@ export async function loadRepositoryManifest({ signal } = {}) {
     manifest,
     source: payload?.source || "repository",
     note: payload?.note || "Manifest metadata only; extensions are not executed.",
+    providerListCount: payload?.providerListCount || 0,
+    errors: Array.isArray(payload?.errors) ? payload.errors : [],
   };
 }
 

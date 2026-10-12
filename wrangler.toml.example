@@ -1,0 +1,11 @@
+name = "cloudstream-api"
+main = "worker/index.js"
+compatibility_date = "2026-10-12"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "cloudstream-db"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+# Set secrets with: wrangler secret put ADMIN_BEARER_TOKEN
+# Never put real secrets in this file.
